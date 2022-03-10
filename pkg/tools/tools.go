@@ -1,17 +1,17 @@
-package main
+package tools
 
 import (
 	"errors"
 	"fmt"
 	"math/rand"
-	"os"
-	"strings"
-	//"unicode/utf8"
+
+	"github.com/NeverlandMJ/Tic-Tac-Toe/types"
 )
 
-type table [][]string
+var errChosen = errors.New("this position is choosen")
 
-func PrintTable (t table)  {
+// PrintTable prints the table of Tic Tac Toe
+func PrintTable (t types.Table)  {
 	
 	for _, v := range t {
 		for _, v1 := range v {
@@ -19,46 +19,37 @@ func PrintTable (t table)  {
 		}
 		fmt.Println()
 	}
-
-	
 }
 
-type ox struct {
-	player1 string
-	player2 string
-	trun string
-	gameOver bool
-	winner string
-	current string
-}
-const (
-	x = "X"
-	o = "O"
-)
-func Positions() ox {
-	game := ox {}
+
+// Positions takes players' names and randomly chooses who will play first
+func Positions() types.Ox {
+	game := types.Ox {}
 	fmt.Println("1st player please enter your name: ")
-	fmt.Scan(&game.player1)
+	fmt.Scan(&game.Player1)
 	fmt.Println("2nd player please enter your name: ")
-	fmt.Scan(&game.player2)
+	fmt.Scan(&game.Player2)
 	turn := rand.Intn(2) // randomly chooses turn for players
 	if turn == 1 {
-		fmt.Println(game.player1, " is X")
-		fmt.Println(game.player2, " is O")
-		game.trun = x
-		game.current = game.player1
+		fmt.Println(game.Player1, " plays with X")
+		fmt.Println(game.Player2, " plays with O")
+		game.Turn = types.X
+		game.Current = game.Player1
 	}else {
-		fmt.Println(game.player2, " is X")
-		fmt.Println(game.player1, " is O")
-		game.trun = o
-		game.current = game.player2
+		fmt.Println(game.Player2, " plays with X")
+		fmt.Println(game.Player2, " plays with O")
+		game.Turn = types.O
+		game.Current = game.Player2
 	}
-	game.gameOver = false
+	game.GameOver = false // start the game
 	return game
-
 }
 
-func Check(t table) (bool, string) {
+
+// Check determines who won or is it draw
+func Check(t types.Table) (bool, string) {
+	x := types.X
+	o := types.O
 	Xcase1 := (t[0][0]==x && t[0][1]==x && t[0][2]==x) 
 	Ocase1 := (t[0][0]==o && t[0][1]==o && t[0][2]==o)
 	Xcase2 := (t[1][0]==x && t[1][1]==x && t[1][2]==x)
@@ -78,24 +69,37 @@ func Check(t table) (bool, string) {
 	Xcase8 := (t[0][0]==x && t[1][1]==x && t[2][2]==x) 
 	Ocase8 := (t[0][0]==o && t[1][1]==o && t[2][2]==o)
 
+	draw := true
+
+	for _, v1 := range t {
+		for _, v2 := range v1 {
+			if v2 == "_" {
+				draw = false
+			}
+		}
+	}
+
 	if Xcase1 || Xcase2 || Xcase3 || Xcase4 || Xcase5 || Xcase6 || Xcase7 || Xcase8 {
 		return true, x
 	}else if Ocase1 || Ocase2 || Ocase3 || Ocase4 || Ocase5 || Ocase6 || Ocase7 || Ocase8 {
 		return true, o
+	}else if draw {
+		return true, types.Draw
 	}else {
 		return false, ""
 	}
-
-	
 }
 
-func Change(t table, n int, pl ox) (table, error) {
-	
-	if pl.trun == x {
+
+// Change changes values into x or o according to players choice
+// if the position is already choosen it returns error "choosen"
+func Change(t types.Table, n int, pl types.Ox) (types.Table, error) {
+	x, o := types.X, types.O
+	if pl.Turn == x {
 		switch n{
 		case 1: 
 			if t[0][0] == o || t[0][0] == x {
-				return t, errors.New("choosen")
+				return t, errChosen
 			}else {
 				t[0][0] = x
 				return t, nil
@@ -103,66 +107,66 @@ func Change(t table, n int, pl ox) (table, error) {
 			
 		case 2:
 			if t[0][1] == o || t[0][1] == x {
-				return t, errors.New("choosen")
+				return t, errChosen
 			}else {
 				t[0][1] = x
 				return t, nil
 			}
 		case 3:
 			if t[0][2] == o || t[0][2] == x {
-				return t, errors.New("choosen")
+				return t, errChosen
 			}else {
 				t[0][2] = x
 				return t, nil
 			}
 		case 4:
 			if t[1][0] == o || t[1][0] == x {
-				return t, errors.New("choosen")
+				return t, errChosen
 			}else {
 				t[1][0] = x
 				return t, nil
 			}
 		case 5:
 			if t[1][1] == o || t[1][1] == x {
-				return t, errors.New("choosen")
+				return t, errChosen
 			}else {
 				t[1][1] = x
 				return t, nil
 			}
 		case 6:
 			if t[1][2] == o || t[1][2] == x {
-				return t, errors.New("choosen")
+				return t, errChosen
 			}else {
 				t[1][2] = x
 				return t, nil
 			}
 		case 7:
 			if t[2][0] == o || t[2][0] == x {
-				return t, errors.New("choosen")
+				return t, errChosen
 			}else {
 				t[2][0] = x
 				return t, nil
 			}
 		case 8:
 			if t[2][1] == o || t[2][1] == x {
-				return t, errors.New("choosen")
+				return t, errChosen
 			}else {
 				t[2][1] = x
 				return t, nil
 			}
 		case 9:
 			if t[2][2] == o || t[2][2] == x {
-				return t, errors.New("choosen")
+				return t, errChosen
 			}else {
 				t[2][2] = x
 				return t, nil
 			}
 		}
-	}else if pl.trun == o {
+	}else if pl.Turn == o {
 		switch n{
 			case 1: 
 				if t[0][0] == o || t[0][0] == x {
-					return t, errors.New("choosen")
+					return t, errChosen
 				}else {
 					t[0][0] = o
 					return t, nil
@@ -170,56 +174,56 @@ func Change(t table, n int, pl ox) (table, error) {
 				
 			case 2:
 				if t[0][1] == o || t[0][1] == x {
-					return t, errors.New("choosen")
+					return t, errChosen
 				}else {
 					t[0][1] = o
 					return t, nil
 				}
 			case 3:
 				if t[0][2] == o || t[0][2] == x {
-					return t, errors.New("choosen")
+					return t, errChosen
 				}else {
 					t[0][2] = o
 					return t, nil
 				}
 			case 4:
 				if t[1][0] == o || t[1][0] == x {
-					return t, errors.New("choosen")
+					return t, errChosen
 				}else {
 					t[1][0] = o
 					return t, nil
 				}
 			case 5:
 				if t[1][1] == o || t[1][1] == x {
-					return t, errors.New("choosen")
+					return t, errChosen
 				}else {
 					t[1][1] = o
 					return t, nil
 				}
 			case 6:
 				if t[1][2] == o || t[1][2] == x {
-					return t, errors.New("choosen")
+					return t, errChosen
 				}else {
 					t[1][2] = o
 					return t, nil
 				}
 			case 7:
 				if t[2][0] == o || t[2][0] == x {
-					return t, errors.New("choosen")
+					return t, errChosen
 				}else {
 					t[2][0] = o
 					return t, nil
 				}
 			case 8:
 				if t[2][1] == o || t[2][1] == x {
-					return t, errors.New("choosen")
+					return t, errChosen
 				}else {
 					t[2][1] = o
 					return t, nil
 				}
 			case 9:
 				if t[2][2] == o || t[2][2] == x {
-					return t, errors.New("choosen")
+					return t, errChosen
 				}else {
 					t[2][2] = o
 					return t, nil
@@ -230,88 +234,67 @@ func Change(t table, n int, pl ox) (table, error) {
 	return t, nil
 }
 
-
-func SwapCurrentPlayer(OX ox) ox {
-	if OX.current == OX.player1 {
-		OX.current = OX.player2
+// SwapCurrentPlayer swaps turns of players
+func SwapCurrentPlayer(OX types.Ox) types.Ox {
+	if OX.Current == OX.Player1 {
+		OX.Current = OX.Player1
 	}else {
-		OX.current = OX.player1
+		OX.Current = OX.Player1
 	}
 
 	return OX
 }
 
+// Play plays the game
 func Play() string {
 	pl := Positions()
-	table := table {
+	table := types.Table {
 		{"_", "_", "_"},
 		{"_", "_", "_"},
 		{"_", "_", "_"},
 	}
 	PrintTable(table)
-	for !pl.gameOver {
+	for !pl.GameOver {
 		var ch int
-		if pl.trun == x {
+		if pl.Turn == types.X {
 			chooseX:
-			fmt.Println(pl.current, ": ")
+			fmt.Println(pl.Current, ": ")
 			fmt.Scan(&ch)
 			table, err := Change(table, ch, pl)
 			if err != nil {
 				fmt.Println(err)
 				goto chooseX
 			}
-			res, _ := Check(table)
+			res, winner := Check(table)
 			if res {
-				pl.gameOver = true
-				pl.winner = pl.player1
+				pl.GameOver = true
+				pl.Winner = winner
 			}else {
-				pl.gameOver = false
-				pl.trun = o
+				pl.GameOver = false
+				pl.Turn = types.O
 				pl = SwapCurrentPlayer(pl)
 			}
-		}else if pl.trun == o {
+		}else if pl.Turn == types.O {
 			chooseO:
-			fmt.Println(pl.player2, ": ")
+			fmt.Println(pl.Player2, ": ")
 			fmt.Scan(&ch)
 			table, err := Change(table, ch, pl)
 			if err != nil {
 				fmt.Println(err)
 				goto chooseO
 			}
-			res, _ := Check(table)
+			res, winner := Check(table)
 			if res {
-				pl.gameOver = true
-				pl.winner = pl.player2
+				pl.GameOver = true
+				pl.Winner = winner
 			}else {
-				pl.gameOver = false
-				pl.trun = x
+				pl.GameOver = false
+				pl.Turn = types.X
 				pl = SwapCurrentPlayer(pl)
 			}
 		}
 		PrintTable(table)		
-		
 	}
 
-	return pl.winner
-}
-
-func main() {
-	var ans string
-	fmt.Println("If you want to play the game type: yes")
-	fmt.Scan(&ans)
-	ans = strings.ToLower(ans)
-	if ans == "yes" {
-		table := table {
-			{"1", "2", "3"},
-			{"4", "5", "6"},
-			{"7", "8", "9"},
-		}
-		PrintTable(table)
-		res := Play()
-		fmt.Println("Winner is ", res)
-	}else {
-		os.Exit(1)
-	}
-
-
+	return pl.Winner
 }
