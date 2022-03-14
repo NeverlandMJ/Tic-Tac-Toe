@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>TicTacToe</title>
+      <style>
+            /* Place the navbar at the bottom of the page, and make it stick */
+      .navbar {
+            background-color: #cc6699; 
+            overflow: hidden;
+            position: relative;
+            bottom: 5;
+            width: 100%;
+      }
+
+/* Style the links inside the navigation bar */
+      .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+      }
+
+/* Change the color of links on hover */
+      .navbar a:hover {
+            background-color: #993366;
+            color: black;
+      }
+
+/* Add a color to the active/current link */
+      .navbar a.active {
+            background-color: #993366;
+            color: white;
+      }
+      .OX-buttons {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+      }
+      .OX-buttons button:hover {
+            background-color: #e114e1;
+      }
+      .button {
+            background-color: #ffccff;
+            border-radius: 16px;
+            font-style: oblique;
+            margin: 10px;
+            font-size: 100px;
+            width: 110px;
+
+      }
+      body {
+            background-image: url('background.jpeg');    
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+      }
+      </style>
+  
+
+</head>
+<body>
+      <div class="navbar">
+            <a href="#home" class="active">Home</a>
+            <a href="#news">News</a>
+            <a href="#contact">Contact</a>
+      </div>
+      <div class="OX-buttons">
+            <div class="first-three"> 
+                  <button  class="button">1</button>
+                   <button  class="button">2</button>
+                   <button  class="button">3</button>
+            </div>
+           <div class="second-three">
+                   <button  class="button">4</button>
+                  <button  class="button">5</button>
+                  <button  class="button">6</button>
+           </div>
+            <div class="third-three">
+                  <button  class="button">7</button>
+                  <button  class="button">8</button>
+                  <button class="button">9</button>
+            </div>
+          
+      </div>
+</body>
+</html>

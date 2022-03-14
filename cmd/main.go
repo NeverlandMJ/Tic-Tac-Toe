@@ -1,16 +1,15 @@
 package main
 
 import (
-	
 	"fmt"
+
+	twoPeople "github.com/NeverlandMJ/Tic-Tac-Toe/pkg/twoPeople"
+	withcomputer "github.com/NeverlandMJ/Tic-Tac-Toe/pkg/withComputer"
+
+	//"github.com/NeverlandMJ/Tic-Tac-Toe/types"
 	"os"
 	"strings"
-	"github.com/NeverlandMJ/Tic-Tac-Toe/types"
-	"github.com/NeverlandMJ/Tic-Tac-Toe/pkg/tools"
-	"github.com/kyokomi/emoji/v2"
 )
-
-
 
 func main() {
 	var ans string
@@ -18,25 +17,31 @@ func main() {
 	fmt.Scan(&ans)
 	ans = strings.ToLower(ans)
 	if ans == "yes" {
-		table := types.Table {
-			{"1", "2", "3"},
-			{"4", "5", "6"},
-			{"7", "8", "9"},
+		kind := 0
+		fmt.Println("👥(2) OR 💻(1): ")
+		fmt.Scan(&kind)
+		if kind == 2 {
+			res := twoPeople.Play()
+			if res == "" {
+				fmt.Println("DRAW!")
+
+			} else {
+				fmt.Println("WINNER: ", res)
+
+			}
+		}else if kind == 1 {
+			res := withcomputer.Play()
+			if res == "" {
+				fmt.Println("DRAW!")
+
+			} else {
+				fmt.Println("WINNER: ", res)
+
+			}
 		}
-		tools.PrintTable(table)
-		res := tools.Play()
-		if res == "" {
-			fmt.Println("DRAW!")
-			
-		}else {
-			fmt.Println("WINNER: ", res)
-			party := emoji.Sprint(":heart:")
-			fmt.Println(strings.Repeat(party, 5))
-		}
-		
-	}else {
+
+	} else {
 		os.Exit(1)
 	}
-
 
 }
