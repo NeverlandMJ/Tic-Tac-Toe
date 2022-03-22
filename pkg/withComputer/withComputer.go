@@ -25,7 +25,7 @@ func PrintTable(t types.Table) {
 	}
 }
 
-// Positions takes players' names and randomly chooses who will play first
+// Positions takes player's names and askis him/her to choose "x" or "o".
 func Positions() types.Ox {
 	game := types.Ox{}
 	fmt.Println("Player please enter your name: ")
@@ -37,20 +37,21 @@ func Positions() types.Ox {
 	fmt.Println("Choose ❌ or 🔴 :")
 	fmt.Scan(&choice)
 	choice = strings.ToLower(choice)
-	if choice != "x"  {
-		fmt.Println(errInvalidInput)
-		goto choose
-	}else if choice != "o" {
+	if choice == "x"  {
+		choice = types.X
+	}else if choice == "o" {
+		choice = types.O
+	}else {
 		fmt.Println(errInvalidInput)
 		goto choose
 	}
 
-	if choice == "x" {
+	if choice == types.X {
 		fmt.Println(game.Player1, " plays with ❌")
 		fmt.Println(game.Player2, " plays with 🔴")
 		game.Current = game.Player1
 		game.Turn = types.X
-	} else if choice == "o" {
+	} else if choice == types.O {
 		fmt.Println(game.Player2, " plays with ❌")
 		fmt.Println(game.Player1, " plays with 🔴")
 		game.Current = game.Player2
