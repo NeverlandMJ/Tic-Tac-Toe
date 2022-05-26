@@ -3,10 +3,12 @@ package tools
 import (
 	"errors"
 	"fmt"
-	"github.com/NeverlandMJ/Tic-Tac-Toe/types"
 	"math/rand"
 	"strconv"
+	"time"
 	"unicode"
+
+	"github.com/NeverlandMJ/Tic-Tac-Toe/types"
 )
 
 var errChosen = errors.New("this position is choosen")
@@ -30,8 +32,8 @@ func Positions() types.Ox {
 	fmt.Scan(&game.Player1)
 	fmt.Println("2nd player please enter your name: ")
 	fmt.Scan(&game.Player2)
-	rand.Seed(10)
-	turn := rand.Intn(2) // randomly chooses turn for players
+	rand.Seed(time.Now().UnixNano())
+	turn := rand.Intn(3) // randomly chooses turn for players
 	if turn == 0 {
 		fmt.Println(game.Player1, " plays with X")
 		fmt.Println(game.Player2, " plays with O")
